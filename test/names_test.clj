@@ -1,4 +1,4 @@
-(ns elements-of-clojure.names-test
+(ns names-test
   (:require [clojure.test :refer [deftest is testing]]
             [elements-of-clojure.names :as names]))
 

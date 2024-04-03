@@ -1,4 +1,4 @@
 {:paths ["src"]
- :deps  {}
- :aliases 
+ :deps  {org.clojure/math.numeric-tower {:mvn/version "0.0.5"}}
+ :aliases
  {:neil {:project {:name elements-of-clojure/elements-of-clojure}}}}

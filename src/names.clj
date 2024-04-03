@@ -1,4 +1,4 @@
-(ns elements-of-clojure.names)
+(ns names)
 
 (defn get-sol-jupiter
   "Does a deep lookup of key `k` within `m` under
