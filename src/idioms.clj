@@ -273,3 +273,28 @@
         _ (fire-rocket! moon)]
     (await-landing moon))
   )
+
+
+;; Use data structure-specific functions where possible
+
+(comment
+
+  ;; a vector can be treated like a map of its indexes to its values
+  (get [0 1] 1)
+  (contains? [0 1] 2)
+
+  ;; a map can be treated as a sequence of entry objects
+  (map key {:a 1 :b 2})
+  (map first {:a 1 :b 2})
+
+  ;; we can even create lazy seqs from Java arrays
+  (->> [1 2 3]
+       int-array
+       (map inc))
+
+  ;; but we should use map-specific functions where possible
+  (let [alpha->numeric {:a 1 :b 2}]
+    ;(map first alpha->numeric)  no
+    ;(map key alpha->numeric)  no
+    (keys alpha->numeric))                                  ; yes
+  )
