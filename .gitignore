@@ -10,3 +10,6 @@
 
 # nRepl
 .nrepl-port
+
+# Git commit message prefix
+.gitmessage
