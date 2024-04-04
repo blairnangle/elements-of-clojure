@@ -298,3 +298,24 @@
     ;(map key alpha->numeric)  no
     (keys alpha->numeric))                                  ; yes
   )
+
+
+;; Don't bother with letfn
+
+(comment
+
+  ;; these two let-bound function definitions and invocations are equivalent, but the second one is more readable
+  ;; an odd number of forms within a binding… feels weird
+
+  (letfn [(cube [n] (* n n n))]
+    (cube 2))
+
+  (let [cube (fn [n] (* n n n))]
+    (cube 2))
+
+  ;; this is mutually recursive nonsense, but it will compile (and result in a StackOverflowError when we try to run it)
+  ;; one advantage of letfn is that it does allow for forward declaration - i.e., we have referenced b before defining it
+  (letfn [(a [x] (b x))
+          (b [x] (a x))]
+    (a 1))
+  )
