@@ -241,7 +241,7 @@
 ;; Communicate side effects consistently
 
 (defn choose-moon []
-  (rand-nth [:Europa :Ganymede :Io :Callisto :Amalthea :Kallichore]))
+  (rand-nth [:europa :ganymede :io :callisto :amalthea :kallichore]))
 
 (defn fire-rocket! [moon]
   (println "I am a nil-returning, side-effecting fn! The value of moon is" moon))
@@ -318,4 +318,24 @@
   (letfn [(a [x] (b x))
           (b [x] (a x))]
     (a 1))
+  )
+
+
+;; Don't obfuscate Java interop
+
+(comment
+
+  ;; we can add a key-value pair to Java map like so
+  (let [planet->moon (java.util.HashMap.)]
+    (.. planet->moon
+        (put :jupiter :ganymede))
+
+    planet->moon)
+
+  ;; but we run the risk of conflating put with a Clojure function
+  ;; so just make the Java interop obvious
+  (let [planet->moon (java.util.HashMap.)]
+    (.put planet->moon :jupiter :ganymede)
+
+    planet->moon)
   )
