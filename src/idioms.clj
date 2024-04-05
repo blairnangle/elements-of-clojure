@@ -339,3 +339,44 @@
 
     planet->moon)
   )
+
+
+;; You don't always need a transducer; use `for` for cartesian products
+
+(comment
+
+  (def s [{:user {:name       "Blair"
+                  :department :engineering}}
+          {:user {:name       "Clare"
+                  :department :design}}
+          {:user {:name       "Reiko"
+                  :department :design}}])
+
+  ;; this works and reads cleanly
+  (->> s
+       (remove nil?)
+       (map :user)
+       (group-by :department))
+
+  ;; this might be more performant because we have used transducers
+  ;; but readability is impaired by the introduction of eduction (group-by isn't implemented as a transducer)
+  (->> s
+       (eduction
+         (comp
+           (remove nil?)
+           (map :user)))
+       (group-by :department))
+
+  ;; we can achieve the same ends using group-by with for
+  ;; although this would start to look cumbersome with more involved transformations
+  (group-by :department
+            (for [record s
+                  :when record
+                  :let [user (:user record)]]
+              user))
+
+  ;; for's best quality is to provide a readable way to generate all the possible combinations of lists - i.e., the cartesian product
+  (for [a [1 2 3]
+        b [:a :b :c]]
+    [a b])
+  )
