@@ -380,3 +380,76 @@
         b [:a :b :c]]
     [a b])
   )
+
+
+;; Nil
+
+(comment
+
+  ;; these two forms are equivalent
+  (conj '() :callisto)
+  (conj nil :callisto)
+
+  ;; as are these two
+  (cons :callisto '())
+  (cons :callisto nil)
+
+  ;; this will throw an IndexOutOfBoundsException
+  (nth '() 42)
+
+  ;; nth of nil is just nil
+  (nth nil 42)
+
+  ;; here, nil is equivalent to an empty map
+  (assoc {} :callisto 1610)
+  (assoc nil :callisto 1610)
+
+  ;; likewise when fetching and providing a default value
+  (get {} :callisto :unknown-year-of-discovery)
+  (get nil :callisto :unknown-year-of-discovery)
+
+  ;; get is extremely liberal in what it will allow us to try and lookup - these all return nil, which isn't great
+  (get {} :callisto)
+  (get 123 :callisto)
+  (get "some string" :callisto)
+  (get (Object.) :callisto)
+  (get nil :callisto)
+  (get {:callisto nil} :callisto)
+  )
+
+(def key->numbers
+  {:a [1 2 3]
+   :b [4 5 6]})
+
+(comment
+
+  ;; looking up a nonexistent keyword => nil
+  (get key->numbers :c)
+
+  ;; as expected => [1 2 3 8 9 10]
+  (-> key->numbers
+      :a
+      (conj 8 9 10))
+
+  ;; weird => [10 9 8]
+  (-> key->numbers
+      :c
+      (conj 8 9 10))
+
+  ;; we can fix this by explicitly providing a sensible default in the case of the lookup returning nil
+  ;; normal => [8 9 10]
+  (-> key->numbers
+      (:c [])
+      (conj 8 9 10))
+  )
+
+;; don't implicitly return nil
+(defn some-function [x & args]
+  (when x
+    (conj x args)))
+
+;; do something like this instead
+(defn some-function-1 [x & args]
+  (if x
+    (conj x args)
+    []))
